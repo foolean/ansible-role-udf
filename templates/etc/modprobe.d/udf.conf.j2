@@ -1,0 +1,10 @@
+{#
+    # Copyright (c) 2023, Bennett Samowich
+    # All rights reserved
+    # SPDX short identifier: BSD-3-Clause
+#}
+{{ ansible_managed | comment }}
+
+# CIS: Ensure mounting of udf filesystems is disabled
+install udf /bin/false
+blacklist udf

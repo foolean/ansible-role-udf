@@ -1,0 +1,28 @@
+# Copyright (c) 2023, Bennett Samowich <bennett@foolean.org>
+# All rights reserved
+# SPDX short identifier: BSD-3-Clause
+---
+
+- name: Ensure mounting of udf filesystems is disabled (CIS)
+  template:
+      src: 'etc/modprobe.d/udf.conf.j2'
+      dest: '/etc/modprobe.d/udf.conf'
+      owner: 'root'
+      group: 'root'
+      mode: '0644'
+  when:
+    - ansible_system == 'Linux'
+    - ansible_board_vendor != "Microsoft Corporation"
+    - ansible_chassis_vendor != "Microsoft Corporation"
+    - not ansible_kernel is search("azure")
+
+
+- name: Unload udf module (CIS)
+  modprobe:
+    name: udf
+    state: absent
+  when:
+    - ansible_system == 'Linux'
+    - ansible_board_vendor != "Microsoft Corporation"
+    - ansible_chassis_vendor != "Microsoft Corporation"
+    - not ansible_kernel is search("azure")
