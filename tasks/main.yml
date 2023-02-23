@@ -3,26 +3,35 @@
 # SPDX short identifier: BSD-3-Clause
 ---
 
-- name: Ensure mounting of udf filesystems is disabled (CIS)
-  template:
-      src: 'etc/modprobe.d/udf.conf.j2'
-      dest: '/etc/modprobe.d/udf.conf'
-      owner: 'root'
-      group: 'root'
-      mode: '0644'
-  when:
-    - ansible_system == 'Linux'
-    - ansible_board_vendor != "Microsoft Corporation"
-    - ansible_chassis_vendor != "Microsoft Corporation"
-    - not ansible_kernel is search("azure")
+# We put the entire role in a block so we can create
+# a role specific tag, which saves the caller from
+# having to do so in their playbook.
+- name: Role foolean/udf
+  block:
 
+    - name: Ensure mounting of udf filesystems is disabled (CIS)
+      template:
+        src: 'etc/modprobe.d/udf.conf.j2'
+        dest: '/etc/modprobe.d/udf.conf'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      when:
+        - ansible_system == 'Linux'
+        - ansible_board_vendor != "Microsoft Corporation"
+        - ansible_chassis_vendor != "Microsoft Corporation"
+        - not ansible_kernel is search("azure")
 
-- name: Unload udf module (CIS)
-  modprobe:
-    name: udf
-    state: absent
-  when:
-    - ansible_system == 'Linux'
-    - ansible_board_vendor != "Microsoft Corporation"
-    - ansible_chassis_vendor != "Microsoft Corporation"
-    - not ansible_kernel is search("azure")
+    - name: Unload udf module (CIS)
+      modprobe:
+        name: udf
+        state: absent
+      when:
+        - ansible_system == 'Linux'
+        - ansible_board_vendor != "Microsoft Corporation"
+        - ansible_chassis_vendor != "Microsoft Corporation"
+        - not ansible_kernel is search("azure")
+
+  # Tags to be applied to this role (block)
+  tags:
+    - 'role_foolean_udf'
