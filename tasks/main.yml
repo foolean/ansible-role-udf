@@ -9,7 +9,8 @@
 - name: Role foolean/udf
   block:
 
-    - name: Ensure mounting of udf filesystems is disabled (CIS)
+    - name: CIS | Ensure mounting of udf filesystems is disabled
+      become: true
       template:
         src: 'etc/modprobe.d/udf.conf.j2'
         dest: '/etc/modprobe.d/udf.conf'
@@ -22,7 +23,8 @@
         - ansible_chassis_vendor != "Microsoft Corporation"
         - not ansible_kernel is search("azure")
 
-    - name: Unload udf module (CIS)
+    - name: CIS | Unload udf module
+      become: true
       modprobe:
         name: udf
         state: absent
