@@ -32,9 +32,9 @@ Ansible role to manage the udf filesystem module
 ## Supported Operating Systems
 
     * Debian (11)
+    * Raspbian (11)
     * RedHat (8)
     * Rocky (8)
-    * Raspbian (11)
 
 
 ## Compliance
